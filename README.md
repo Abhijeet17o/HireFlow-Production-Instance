@@ -1,4 +1,4 @@
-# 🚀 HireF## ✨ Features
+# 🚀 HireFlow ✨ Features
 
 - **🖥️ Modern Dashboard**: Clean, responsive interface built with React & TypeScript
 - **🔐 Google OAuth**: Secure authentication with Google Sign-In
