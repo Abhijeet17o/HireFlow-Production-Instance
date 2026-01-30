@@ -120,10 +120,6 @@ export function LoginPage() {
             >
               Continue as Guest
             </button>
-            
-            <p className="text-xs text-center text-gray-400">
-              Note: Google OAuth is deprecated. Use Guest mode to access the app.
-            </p>
 
             <div className="text-center">
               <p className="text-xs text-gray-500">
