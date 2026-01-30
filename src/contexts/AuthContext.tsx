@@ -3,15 +3,18 @@ import {
   saveUser, 
   getUser, 
   getUserProfile,
-  saveCampaign,
-  getUserCampaigns,
-  saveCandidate,
-  getCampaignCandidates,
   initializeDatabase,
   type UserProfile,
   type Campaign,
   type Candidate
 } from '../services/database';
+import {
+  initializeDummyData,
+  saveLocalCampaign,
+  getLocalCampaigns,
+  saveLocalCandidate,
+  getLocalCandidates,
+} from '../services/localStorage';
 
 interface User {
   id: string;
@@ -152,7 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const skipLogin = () => {
     // Create a guest user for demo/testing purposes
     const guestUser: User = {
-      id: 'guest-' + Date.now(),
+      id: 'guest-user',
       email: 'guest@hireflow.demo',
       name: 'Guest User',
       picture: undefined,
@@ -163,6 +166,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('👤 Skipping login, entering as guest');
     setUser(guestUser);
     localStorage.setItem('hireflow_user', JSON.stringify(guestUser));
+    
+    // Initialize dummy data for guest
+    initializeDummyData(guestUser.id);
   };
 
   // Data management methods
@@ -189,11 +195,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
 
       console.log('💾 Campaign data to save:', { id: campaign.id, user_id: campaign.user_id, title: campaign.title });
-      const result = await saveCampaign(campaign);
+      const result = saveLocalCampaign(campaign);
       console.log('💾 Campaign save result:', result);
       
       if (result) {
-        console.log('✅ Campaign saved successfully, returning campaign object');
+        console.log('✅ Campaign saved successfully to localStorage, returning campaign object');
         return campaign;
       } else {
         console.error('❌ Campaign save failed');
@@ -213,8 +219,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       console.log('📊 Attempting to get campaigns for user:', user.id);
-      const campaigns = await getUserCampaigns(user.id);
-      console.log('📊 Retrieved user campaigns:', campaigns.length, 'campaigns found');
+      const campaigns = getLocalCampaigns(user.id);
+      console.log('📊 Retrieved user campaigns from localStorage:', campaigns.length, 'campaigns found');
       console.log('📊 Campaign details:', campaigns.map(c => ({ id: c.id, title: c.title, user_id: c.user_id })));
       return campaigns;
     } catch (error) {
@@ -240,8 +246,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         added_date: candidateData.addedDate || new Date().toISOString().split('T')[0]
       };
 
-      const result = await saveCandidate(candidate);
-      console.log('Candidate saved:', result);
+      const result = saveLocalCandidate(candidate);
+      console.log('Candidate saved to localStorage:', result);
       return result;
     } catch (error) {
       console.error('Error saving candidate:', error);
@@ -251,8 +257,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const getCampaignCandidatesData = async (campaignId: string): Promise<Candidate[]> => {
     try {
-      const candidates = await getCampaignCandidates(campaignId);
-      console.log('Retrieved campaign candidates:', candidates);
+      const candidates = getLocalCandidates(campaignId);
+      console.log('Retrieved campaign candidates from localStorage:', candidates);
       return candidates;
     } catch (error) {
       console.error('Error getting campaign candidates:', error);
