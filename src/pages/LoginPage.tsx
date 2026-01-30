@@ -52,7 +52,7 @@ export function LoginPage() {
             Welcome to HireFlow
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Your intelligent recruitment dashboard
+            Your intelligent recruitment dashboard - v2.0
           </p>
         </div>
 
