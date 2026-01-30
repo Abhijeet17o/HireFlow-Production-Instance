@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Users, Briefcase, TrendingUp, Shield } from 'lucide-react';
 
 export function LoginPage() {
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { login, skipLogin, isAuthenticated, isLoading } = useAuth();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -102,6 +102,28 @@ export function LoginPage() {
                 onError={handleLoginError}
               />
             </div>
+
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">or</span>
+              </div>
+            </div>
+
+            {/* Skip Login Button */}
+            <button
+              onClick={skipLogin}
+              className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+            >
+              Continue as Guest
+            </button>
+            
+            <p className="text-xs text-center text-gray-400">
+              Note: Google OAuth is deprecated. Use Guest mode to access the app.
+            </p>
 
             <div className="text-center">
               <p className="text-xs text-gray-500">

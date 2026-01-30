@@ -26,6 +26,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (credential: string) => Promise<void>;
+  skipLogin: () => void;
   logout: () => void;
   isAuthenticated: boolean;
   
@@ -148,6 +149,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const skipLogin = () => {
+    // Create a guest user for demo/testing purposes
+    const guestUser: User = {
+      id: 'guest-' + Date.now(),
+      email: 'guest@hireflow.demo',
+      name: 'Guest User',
+      picture: undefined,
+      verified_email: false,
+      onboardingCompleted: true,
+    };
+    
+    console.log('👤 Skipping login, entering as guest');
+    setUser(guestUser);
+    localStorage.setItem('hireflow_user', JSON.stringify(guestUser));
+  };
+
   // Data management methods
   const saveCampaignData = async (campaignData: any): Promise<Campaign | null> => {
     if (!user) {
@@ -260,6 +277,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     isLoading,
     login,
+    skipLogin,
     logout,
     isAuthenticated: !!user,
     saveCampaignData,
